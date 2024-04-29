@@ -3,8 +3,8 @@
 #ifndef GLOBAL_VAR_HPP
     #define GLOBAL_VAR_HPP
     
-    #define SCREEN_WIDTH 225
-    #define SCREEN_HEIGHT 400
+    #define SCREEN_TITLE "Raylib minesweeper"
+    #define SPRITE_SIZE 16
 
     extern Texture SPRITE_SHEET;
     

@@ -1,24 +1,13 @@
-#include "raylib.h"
 #include "game.h"
 #include "global.h"
+#include <stdio.h>
 
 int main(void)
 {
-
-
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "raylib mine sweeper");
-    SetTargetFPS(60);  
-
-    // LOAD TEXTURES AND VARIABLES AFTER SCREEN CREATION
-    init();
-
-    while (!WindowShouldClose())    
-    {
-        update();
-        draw();
+    Game game = default_game();
+    while (game.playing) {
+        fprintf(stderr,"WE GOT HERE\n");
+        start_game(&game);
     }
-
-    CloseWindow();       
     return 0;
 }
