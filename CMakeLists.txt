@@ -15,7 +15,15 @@ endif()
 set(CMAKE_C_STANDARD 11) # Requires C11 standard
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_executable(${PROJECT_NAME} main.c global.h global.c game.c game.h field.c field.h ui.c ui.h)
+add_executable(${PROJECT_NAME} 
+    main.c 
+    global.h global.c 
+    game.c game.h 
+    field.c field.h 
+    ui.c ui.h
+    config.c config.h
+    toml.c toml.h
+    )
 
 target_link_libraries(${PROJECT_NAME} raylib)
 

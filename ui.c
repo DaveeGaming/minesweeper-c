@@ -16,6 +16,11 @@ int num_width;
 
 int decor_height;
 
+void check_ui_press(Game *game) {
+    // if the emoji is pressed, reset
+    // also, if lost, change sprite
+}
+
 void draw_numbers(int number, int start_x) {
     char buff[4];
     sprintf(buff,"%3d", number);
@@ -36,13 +41,15 @@ void draw_numbers(int number, int start_x) {
 }
 
 void draw_top_bar(Game *game) {
+
     num_width = num_size.x * (decor_height / num_size.y);
     centerX = game->window_w / 2;
     centerY = game->field_start / 2;
     
     decor_height = game->field_start - (padding * 2);
 
-    const Rectangle emoji = {0,24 ,emoji_size.x, emoji_size.y};
+    const Rectangle emoji_normal = {0,24 ,emoji_size.x, emoji_size.y};
+    const Rectangle emoji_lost = {150,24 ,emoji_size.x, emoji_size.y};
     const Rectangle emoji_to = { 
          centerX - decor_height/2,
          centerY - decor_height/2,
@@ -50,6 +57,14 @@ void draw_top_bar(Game *game) {
          decor_height,
     };
     // Draw middle emoji
+
+    Rectangle emoji;
+    if (game->lost) {
+        emoji = emoji_lost;
+    } else {
+        emoji = emoji_normal;
+    }
+
     DrawTexturePro(SPRITE_SHEET,
             emoji,
             emoji_to,
@@ -60,14 +75,6 @@ void draw_top_bar(Game *game) {
 
     draw_numbers((int)game->time, side_padding);
     draw_numbers(game->bomb_count, game->window_w - side_padding - 3*num_width);
-
-    // center the emoji
-    //
-    // draw the time and get the sprites from the spritesheet
-    // draw background??
-
-
-    // set bg color to minesweeper bg
 }
 
 

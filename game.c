@@ -1,8 +1,7 @@
 #include "raylib.h"
 #include "game.h"
-#include "global.h"
 #include "field.h"
-#include <stdio.h>
+#include "global.h"
 #include <stdlib.h>
 #include "ui.h"
 
@@ -54,13 +53,14 @@ Vector2 cursor_click_pos(Game *game) {
 Game default_game() {
     // MAP stays null until generated.
     return (Game) {
-        .width = 20,
-        .height = 20,
+        .width = 5,
+        .height = 5,
         .score = 0,
         .field_start = 50,
 
         .reset = false,
         .playing = true,
+        .lost = false,
         .ui_scale = 2,
     };
 }
@@ -81,23 +81,34 @@ void close_game(Game *game) {
 }
 
 void update(Game *game) {
-    game->time += GetFrameTime();
 
-
+    if (game->bomb_count == 0) {
+        //check for win
+        if (check_win(game)) {
+            //yipee
+            unhide_non_bomb(game);
+            game->lost = true;
+        }
+    }
     currentW = GetScreenWidth();
     currentH = GetScreenHeight();
     float wScale = currentW / (float)game->window_w;
     float hScale = currentH / (float)game->window_h;
     if (wScale < hScale) { scale = wScale; } else { scale = hScale; }
 
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        Vector2 pos = cursor_click_pos(game);
-        reveal_tile(game, pos.x, pos.y); 
+    if (!game->lost) {
+        game->time += GetFrameTime();
+
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            Vector2 pos = cursor_click_pos(game);
+            reveal_tile(game, pos.x, pos.y); 
+        }
+        if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+            Vector2 pos = cursor_click_pos(game);
+            flag_tile(game, pos.x, pos.y);
+        }
     }
-    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-        Vector2 pos = cursor_click_pos(game);
-        flag_tile(game, pos.x, pos.y);
-    }
+
     if (WindowShouldClose()) {
         game->playing = false;
     }
@@ -108,6 +119,7 @@ void update(Game *game) {
     }
     if (IsKeyPressed(KEY_R)) {
         game->time = 0;
+        game->lost = false;
         game->bomb_count = 0;
         regenerate_field(game, game->width, game->height);
     }
@@ -123,6 +135,7 @@ void start_game(Game *game) {
     game->window_h = game->field_start + game->height * game->ui_scale * SPRITE_SIZE; 
     game->time = 0;
     game->bomb_count = 0;
+    game->lost = false;
     game->reset = false;
     
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);

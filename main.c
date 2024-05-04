@@ -1,12 +1,14 @@
 #include "game.h"
 #include "global.h"
-#include <stdio.h>
+#include "config.h"
 
 int main(void)
 {
+    Config c = load_config();
     Game game = default_game();
+    apply_config(&c, &game);
+
     while (game.playing) {
-        fprintf(stderr,"WE GOT HERE\n");
         start_game(&game);
     }
     return 0;

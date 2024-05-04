@@ -11,6 +11,7 @@
         Tile **map;
         int width;
         int height;
+        double bomb_chance;
 
         double ui_scale;
         float time;
@@ -23,6 +24,7 @@
         int score;
         bool playing;
         bool reset;
+        bool lost;
     } Game;
 
 
